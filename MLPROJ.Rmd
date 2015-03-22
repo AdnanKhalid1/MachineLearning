@@ -20,9 +20,6 @@ training = data[inTrain,]
 testing = data[-inTrain,]
 ```  
 
-#split = sample.split(data$classe, SplitRatio = 0.6)
-#training = subset(data, split == TRUE)
-#testing = subset(data, split == FALSE)  
 
 Removing useless variabes with no variance  
 ```{r}
@@ -44,4 +41,4 @@ table(testing$classe, PredictCART)
 print(confusionMatrix(PredictCART, testing$classe))
 ```  
 
-Model has 87% accuracy on new data set with Kappa of 83%
+Model has accuracy of 99.97% on the testing set data with 95% confidence interval of 99.8% to 100% accuracy
