@@ -1,0 +1,47 @@
+---
+output: html_document
+---
+# Machine Learning Project  
+
+Loading Data and Packages  
+```{r}
+library(caret)                                             
+library(randomForest)
+library(caTools)  
+library(rpart)
+library(rpart.plot)  
+data = read.csv("pml-training.csv")
+test = read.csv("pml-testing.csv")
+```  
+Splitting training data into training and testing sets  
+```{r}
+inTrain = createDataPartition(y=data$classe,p=0.7,list=FALSE)
+training = data[inTrain,]
+testing = data[-inTrain,]
+```  
+
+#split = sample.split(data$classe, SplitRatio = 0.6)
+#training = subset(data, split == TRUE)
+#testing = subset(data, split == FALSE)  
+
+Removing useless variabes with no variance  
+```{r}
+useless <- nearZeroVar(training)
+training <- training[, -useless]
+```  
+
+
+Training a Tree Model  
+```{r}
+Tree = rpart(classe ~., data=training, method="class", control=rpart.control(minbucket=100))
+prp(Tree)
+```  
+
+Predicting the validation data and evaluating performance  
+```{r}
+PredictCART = predict(Tree, newdata=testing, type="class")
+table(testing$classe, PredictCART)
+print(confusionMatrix(PredictCART, testing$classe))
+```  
+
+Model has 87% accuracy on new data set with Kappa of 83%
